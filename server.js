@@ -25,14 +25,16 @@ client.on("connect",function(){
     qos:1
   };
   var topic="foo";
-  var message="test message";
+  var cmd = {command: "openChannel", channelId: "f0ecdb19-f4d8-4e40-aa40-cbf34f6e81f2", counter: 0};
   var topic_list=["foo.*", "topic3", "topic4"];
   console.log("subscribing to topics");
-  client.subscribe(topic,{qos:1}); //single topic
-  client.subscribe(topic_list,{qos:1}); //topic list
+  client.subscribe(topic, { qos: 1 }); //single topic
+  client.subscribe(topic_list, { qos: 1 }); //topic list
   var counter = 0;
-  var timer_id=setInterval(function(){
-    publish(topic, message + counter, options);
+  var timer_id=setInterval(function() {
+    cmd.counter++;
+    var message = JSON.stringify(cmd);
+    publish(topic, message, options);
     counter++;
   },5000);
   //notice this is printed even before we connect
